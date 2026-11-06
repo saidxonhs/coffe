@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pour / Play — specialty kofe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#efe7d8;--ink:#2a1d15;--mute:#9a8f82;--clay:#b4502e;color-scheme:light}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 "DM Sans",system-ui,sans-serif;overflow:hidden;transition:background .8s;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+header{position:fixed;inset:env(safe-area-inset-top,0px) 0 auto 0;z-index:10;display:flex;align-items:center;gap:32px;padding:18px 5vw}
+.logo{font:500 22px "Playfair Display",serif}
+nav{display:flex;gap:28px;margin-left:auto;font-size:13px;font-weight:500}
+a{color:inherit;text-decoration:none}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);border:0;border-radius:99px;padding:12px 24px;font:700 13px "DM Sans";cursor:pointer}
+main{position:relative;height:100%;overflow-y:auto;scroll-snap-type:y proximity;scroll-behavior:smooth;z-index:2}
+section{height:100vh;height:100dvh;scroll-snap-align:start;display:flex;align-items:center;padding:90px 8vw 40px;position:relative}
+.txt{max-width:46vw;position:relative;z-index:3}
+h1,h2{font-family:"Playfair Display",serif;font-weight:800;line-height:.95;text-transform:uppercase;transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .9s}
+h1{font-size:clamp(52px,9vw,128px)}
+h2{font-size:clamp(40px,6vw,88px)}
+.ghost{color:var(--mute)}
+.num{font:500 28px "Playfair Display",serif;display:block;margin-bottom:10px}
+.lead{max-width:42ch;margin:22px 0 26px;color:#5b4c3f}
+.bgw{position:absolute;right:-2vw;bottom:15vh;font:800 clamp(52px,9vw,128px)/1 "Playfair Display",serif;color:var(--mute);opacity:.5;text-transform:uppercase;z-index:0}
+.hint{position:absolute;left:8vw;bottom:30px;font-size:13px;color:var(--mute)}
+section .txt>*{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+section.on .txt>*{opacity:1;transform:none}
+section.on .txt>*:nth-child(2){transition-delay:.12s}section.on .txt>*:nth-child(3){transition-delay:.24s}section.on .txt>*:nth-child(4){transition-delay:.36s}
+.chip{position:absolute;z-index:3;background:#fff;border-radius:6px;padding:6px 14px;font:700 13px "DM Sans";box-shadow:0 8px 18px rgba(42,29,21,.2);opacity:0;transition:opacity .8s;animation:bob 4s ease-in-out infinite}
+.chip.dk{background:var(--ink);color:#fff}
+.on .chip{opacity:1}
+@keyframes bob{50%{transform:translateY(-12px) rotate(-2deg)}}
+.dots{position:fixed;left:2.2vw;top:50%;transform:translateY(-50%);z-index:10;display:grid;gap:12px}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--ink);background:transparent;padding:0;cursor:pointer}
+.dots button.on{background:var(--ink)}
+.chat{position:fixed;right:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:10;background:var(--ink);color:var(--bg);border:0;border-radius:99px;padding:11px 20px;font:700 13px "DM Sans";cursor:pointer}
+a:focus-visible,button:focus-visible{outline:3px solid var(--clay);outline-offset:3px}
+@media (max-width:760px){
+ nav{display:none}section{align-items:flex-start;padding-top:96px}.txt{max-width:100%}
+ .lead{margin:14px 0 18px}.dots{left:6px}.bgw{bottom:8vh}.chip{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}main{scroll-behavior:auto}}
+
+header{background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(8px)}
+#acct{display:flex;align-items:center;gap:14px;font-size:13px}
+.link{background:none;border:0;font:500 13px "DM Sans";color:inherit;cursor:pointer;padding:6px}
+.who{font-weight:700}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.btn:hover{filter:brightness(1.25)}
+.btn[disabled]{opacity:.4;cursor:default}
+button.chip{border:0;cursor:pointer}
+section.shop{height:auto;min-height:100vh;display:block;padding:110px 8vw 60px;scroll-snap-align:start}
+.wrap{max-width:1180px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;margin-top:34px}
+.card{background:var(--card);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:6px;perspective:700px;box-shadow:0 14px 34px rgba(42,29,21,.12)}
+.card h3{font:700 22px "Playfair Display",serif;line-height:1.15}
+.meta{font-size:13px;color:var(--mute);font-weight:500}
+.card .row{margin-top:auto;padding-top:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.bag{height:200px;display:grid;place-items:center;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 16px 12px rgba(42,29,21,.3));margin-bottom:10px}
+.card:hover .bag{transform:rotateY(-16deg) rotateX(6deg) translateY(-8px)}
+.bag>div{width:132px;height:184px;background:linear-gradient(100deg,rgba(255,255,255,.28),transparent 30%,rgba(0,0,0,.18)),var(--c);clip-path:polygon(0 7%,10% 0,90% 0,100% 7%,100% 100%,0 100%);display:grid;place-items:center}
+.lbl{background:#f7efe0;width:80%;padding:12px 4px;text-align:center;border-radius:3px;display:grid;gap:2px}
+.lbl b{font:800 15px "Playfair Display",serif;text-transform:uppercase}
+.lbl small{font-size:11px;color:#6b5a48}
+.plans .card{perspective:none}
+.price{font:700 26px "Playfair Display",serif}
+footer{margin-top:90px;padding-top:24px;border-top:1px solid rgba(42,29,21,.2);font-size:13px;color:#6b5a48}
+.ov{position:fixed;inset:0;background:rgba(42,29,21,.55);display:none;place-items:center;z-index:50;padding:16px}
+.ov.open{display:grid}
+.dlg{background:var(--card);border-radius:20px;padding:28px;width:min(100%,420px);display:grid;gap:12px;max-height:92vh;overflow:auto}
+.dlg h3{font:800 26px "Playfair Display",serif}
+.tabs{display:flex;gap:6px;background:var(--bg);padding:4px;border-radius:99px}
+.tabs button{flex:1;border:0;background:transparent;padding:9px;border-radius:99px;font:700 13px "DM Sans";cursor:pointer;color:var(--ink)}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+label{display:grid;gap:4px;font-size:13px;font-weight:700}
+input{font:400 15px "DM Sans";padding:12px 14px;border:1px solid #cdbfa8;border-radius:10px;background:#fff;color:var(--ink)}
+.err{color:#a3281a;font-size:13px;min-height:1.2em}
+.small{font-size:13px;color:#6b5a48}
+.x{background:none;border:0;font:500 13px "DM Sans";cursor:pointer;color:#6b5a48;justify-self:center}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{border:1px solid var(--ink);background:transparent;border-radius:99px;padding:9px 16px;font:700 13px "DM Sans";cursor:pointer;color:var(--ink)}
+.opts button.sel{background:var(--ink);color:var(--bg)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(94vw,400px);background:var(--card);z-index:60;transform:translateX(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:24px;box-shadow:-20px 0 40px rgba(0,0,0,.2)}
+.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.dh h3{font:800 26px "Playfair Display",serif}
+#cbody{flex:1;overflow:auto;display:grid;align-content:start;gap:14px}
+.it{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding-bottom:12px;border-bottom:1px solid #e3d8c3}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--ink);background:transparent;cursor:pointer;font:700 15px "DM Sans";color:var(--ink)}
+.df{display:grid;gap:12px;padding-top:14px}
+.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:12px 22px;border-radius:99px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:.35s;z-index:80}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:760px){header{gap:10px;padding:12px 4vw}.logo{font-size:17px}#acct{gap:6px}.btn{padding:9px 14px}section.shop{padding:96px 7vw 50px}}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<header>
+ <span class="logo">POUR / PLAY</span>
+ <nav><a href="#shop">Specialty coffee</a><a href="#s2">Features</a><a href="#plans">Plans</a></nav>
+ <div id="acct"></div>
+ <button class="btn ghost" type="button" data-open="cart" style="margin-left:0">Savat <span id="cc">0</span></button>
+</header>
+<div class="dots" id="dots" aria-label="Bo'limlar"></div>
+<main id="main">
+ <section id="s1" class="on">
+  <div class="bgw" aria-hidden="true">Beans</div>
+  <div class="txt"><h1>Wake<br>the<br><span class="ghost">Beans</span></h1><p class="lead">Yangi qovurilgan specialty kofe, uyingizgacha yetkazamiz.</p><button class="btn" type="button" data-go="#shop">Kofe tanlash</button></div>
+  <span class="hint">Pastga suring</span>
+ </section>
+ <section id="s2">
+  <div class="txt"><span class="num">1.</span><h2>Let it<br>bloom</h2>
+   <p class="lead">Issiq suv donalarga tegishi bilan ular nafas oladi. Sekin quying, birinchi 30 soniyada hid ochiladi.</p>
+   <a class="btn" href="#s3">Learn more</a></div>
+ </section>
+ <section id="s3">
+  <div class="txt"><span class="num">2.</span><h2>Sip the<br>unexpected</h2>
+   <p class="lead">Karamel, sitrus yoki shokolad: har bir qovurish kutilmagan ta'm yashiradi.</p>
+   <a class="btn" href="#s4">Learn more</a></div>
+ </section>
+ <section id="s4">
+  <div class="txt"><span class="num">3.</span><h2>Make time<br>taste better</h2>
+   <p class="lead">Origin, roast va flavor bo'yicha o'zingizga mos stakanni toping. Obuna istalgan paytda to'xtatiladi.</p>
+   <button class="btn" type="button" data-quiz>Find your cup</button></div>
+  <button type="button" data-quiz class="chip dk" style="left:52vw;top:24vh">Roast</button>
+  <button type="button" data-quiz class="chip" style="left:46vw;top:40vh;animation-delay:-1s">Origin</button>
+  <button type="button" data-quiz class="chip" style="left:50vw;top:62vh;animation-delay:-2s">Flavor</button>
+ </section>
+
+ <section class="shop" id="shop"><div class="wrap">
+  <h2>Our coffees</h2>
+  <p class="lead">Har hafta yangi qovuriladi. Savatga qo’shing, Sign up qiling va buyurtma bering.</p>
+  <div class="grid" id="grid"></div>
+  <h2 id="plans" style="margin-top:90px">Plans</h2>
+  <p class="lead">Kofeni har safar qayta buyurtma qilmang: obunani o’zingizga qulay muddatga tanlang.</p>
+  <div class="grid plans" id="plangrid"></div>
+  <footer>© 2026 Pour / Play. Barcha huquqlar himoyalangan.</footer>
+ </div></section>
+</main>
+<div class="ov" id="auth" role="dialog" aria-modal="true" aria-label="Hisob"><div class="dlg">
+ <div class="tabs"><button type="button" data-tab="signup" class="on">Sign up</button><button type="button" data-tab="login">Log in</button></div>
+ <form id="af" novalidate style="display:grid;gap:12px">
+  <label id="nl">Ism<input name="name" autocomplete="name"></label>
+  <label>Email<input name="email" type="email" autocomplete="email"></label>
+  <label>Parol (kamida 6 belgi)<input name="pass" type="password" autocomplete="current-password"></label>
+  <p class="err" id="ae" role="alert"></p>
+  <button class="btn" type="submit" id="asub">Hisob yaratish</button>
+ </form>
+ <p class="small">Hisob ma’lumotlari faqat shu qurilmadagi brauzerda saqlanadi.</p>
+ <button class="x" type="button" data-close>Yopish</button>
+</div></div>
+<div class="ov" id="quiz" role="dialog" aria-modal="true" aria-label="Kofe tanlash"><div class="dlg">
+ <h3>Find your cup</h3>
+ <p class="small">Qovurish darajasi</p>
+ <div class="opts"><button type="button" data-q="r:Light">Light</button><button type="button" data-q="r:Medium">Medium</button><button type="button" data-q="r:Dark">Dark</button></div>
+ <p class="small">Ta’m</p>
+ <div class="opts"><button type="button" data-q="f:Fruity">Fruity</button><button type="button" data-q="f:Chocolate">Chocolate</button><button type="button" data-q="f:Nutty">Nutty</button></div>
+ <div id="qres" class="small">Ikkala variantni tanlang, sizga mos kofeni topamiz.</div>
+ <button class="x" type="button" data-close>Yopish</button>
+</div></div>
+<div class="ov" id="info" role="dialog" aria-modal="true"><div class="dlg"><h3 id="it"></h3><p id="ib"></p><button class="btn" type="button" data-close>Yaxshi</button></div></div>
+<aside class="drawer" id="cart" aria-label="Savat">
+ <div class="dh"><h3>Savat</h3><button class="x" type="button" data-close>Yopish</button></div>
+ <div id="cbody"></div>
+ <div class="df"><div class="row"><span>Jami</span><b id="ct">0</b></div><button class="btn" type="button" data-checkout>Buyurtma berish</button></div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+<script>
+const main=document.getElementById('main'),secs=[...main.querySelectorAll('section')],dots=document.getElementById('dots');
+const bgs=['#efe7d8','#e6dbc6','#efe2cc','#e4d6bd','#efe7d8'];let active=0;
+secs.forEach((s,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Bo\u2018lim '+(i+1));b.onclick=()=>s.scrollIntoView({behavior:'smooth'});dots.appendChild(b)});
+const bs=[...dots.children];bs[0].classList.add('on');
+let burst=()=>{};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=secs.indexOf(e.target);secs.forEach(s=>s.classList.toggle('on',s===e.target));bs.forEach((b,k)=>b.classList.toggle('on',k===i));document.body.style.background=bgs[i];if(i!==active){active=i;burst()}}}),{root:main,rootMargin:"-50% 0px -50% 0px",threshold:0});
+secs.forEach(s=>io.observe(s));
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}}));
+
+try{
+let ox=2,oy=0,sc=1,mx=0,my=0;
+const cv=document.getElementById('gl'),R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.1;
+const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(35,1,.1,50);C.position.set(0,1.1,9);C.lookAt(0,0,0);
+const tex=(w,h,draw,srgb)=>{const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;if(srgb)t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t};
+// studio environment: softboxes for realistic reflections
+const et=tex(1024,512,(x)=>{const g=x.createLinearGradient(0,0,0,512);g.addColorStop(0,'#3a2b20');g.addColorStop(.5,'#c9b79c');g.addColorStop(1,'#6b5a48');x.fillStyle=g;x.fillRect(0,0,1024,512);
+x.fillStyle='#fff';x.shadowColor='#fff';x.shadowBlur=40;[[120,110,200,110],[560,80,260,90],[860,150,120,140]].forEach(r=>x.fillRect(...r))},true);
+et.mapping=THREE.EquirectangularReflectionMapping;
+S.environment=new THREE.PMREMGenerator(R).fromEquirectangular(et).texture;
+const dl=new THREE.DirectionalLight(0xffffff,1.3);dl.position.set(3,5,6);S.add(dl);
+const pl=new THREE.PointLight(0xffb067,1.2,30);pl.position.set(-4,-1,4);S.add(pl);
+const grain=tex(256,256,(x,w,h)=>{const d=x.createImageData(w,h);for(let i=0;i<d.data.length;i+=4){const v=110+Math.random()*110;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0);x.globalAlpha=.5;x.strokeStyle='#000';x.lineWidth=2;
+for(let i=0;i<120;i++){x.beginPath();const a=Math.random()*w,b=Math.random()*h;x.moveTo(a,b);x.quadraticCurveTo(a+Math.random()*40-20,b+Math.random()*40-20,a+Math.random()*50-25,b+Math.random()*50-25);x.stroke()}});
+grain.repeat.set(3,3);
+const PM=(o)=>new THREE.MeshPhysicalMaterial(Object.assign({side:THREE.DoubleSide},o));
+const ceramic=(c)=>PM({color:c,roughness:.2,clearcoat:1,clearcoatRoughness:.05});
+const prof=(pts)=>new THREE.LatheGeometry(new THREE.SplineCurve(pts.map(p=>new THREE.Vector2(p[0],p[1]))).getPoints(70),64);
+const cupGeo=()=>prof([[.001,0],[.5,0],[.78,.14],[1,.7],[1.1,1.1],[1,1.1],[.92,.95],[.7,.25],[.001,.2]]);
+const addCup=(g,y,sCol,cCol,cy,r)=>{const c=new THREE.Mesh(cupGeo(),ceramic(sCol));c.position.y=y;g.add(c);
+const h=new THREE.Mesh(new THREE.TorusGeometry(.42,.09,20,36,Math.PI),ceramic(sCol));h.rotation.z=-Math.PI/2;h.position.set(1.05,y+.62,0);g.add(h);return c};
+function tube(curve,seg,rad,rf){const pts=curve.getPoints(seg),fr=curve.computeFrenetFrames(seg,false),pos=[],idx=[];
+for(let i=0;i<=seg;i++){const r=rf(i/seg);for(let j=0;j<=rad;j++){const a=j/rad*Math.PI*2,n=fr.normals[i].clone().multiplyScalar(Math.cos(a)).add(fr.binormals[i].clone().multiplyScalar(Math.sin(a)));pos.push(pts[i].x+n.x*r,pts[i].y+n.y*r,pts[i].z+n.z*r)}}
+for(let i=0;i<seg;i++)for(let j=0;j<rad;j++){const a=i*(rad+1)+j,b=a+rad+1;idx.push(a,b,a+1,b,b+1,a+1)}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);g.computeVertexNormals();return g}
+const G=[];
+// ---- 0: bean with a real carved groove
+const bg=new THREE.SphereGeometry(1,128,128),bp=bg.attributes.position,col=new Float32Array(bp.count*3);
+for(let i=0;i<bp.count;i++){const x=bp.getX(i),y=bp.getY(i),z=bp.getZ(i);
+const cx=.12*Math.sin(y*3.2),d=Math.exp(-((x-cx)**2)/.0045)*(z>0?1:0)*Math.max(0,1-Math.pow(Math.abs(y),6))*.22*Math.min(1,z*3);
+const k=1-d+.02*Math.sin(x*9+y*7)*Math.sin(z*8);bp.setXYZ(i,x*k,y*k,z*k);const t=Math.min(1,d/.22);
+col[i*3]=1-.3*t;col[i*3+1]=1-.55*t;col[i*3+2]=1-.85*t}
+bg.setAttribute('color',new THREE.BufferAttribute(col,3));bg.computeVertexNormals();
+const beanMat=PM({color:0x7b4527,roughness:.42,clearcoat:.35,clearcoatRoughness:.4,bumpMap:grain,bumpScale:2.5,vertexColors:true});
+const mk=s=>{const m=new THREE.Mesh(bg,beanMat);m.scale.set(.82*s,1.22*s,.68*s);return m};
+let g=new THREE.Group();const bean=mk(1);g.add(bean);const mini=[mk(.32),mk(.26)];mini.forEach(m=>g.add(m));G.push(g);
+// ---- 1: dripper + glass carafe + stream
+g=new THREE.Group();
+const cone=new THREE.Mesh(new THREE.CylinderGeometry(1.15,.28,1.1,64,1,true),ceramic(0xb4502e));cone.position.y=1.15;g.add(cone);
+const rim=new THREE.Mesh(new THREE.TorusGeometry(1.15,.07,16,64),ceramic(0xa04526));rim.rotation.x=Math.PI/2;rim.position.y=1.7;g.add(rim);
+const cof=new THREE.Mesh(new THREE.CircleGeometry(1.06,48),PM({color:0x4a2a16,roughness:.55,bumpMap:grain,bumpScale:3}));cof.rotation.x=-Math.PI/2;cof.position.y=1.55;g.add(cof);
+const stand=new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,.14,32),ceramic(0x8f3b20));stand.position.y=.55;g.add(stand);
+const car=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,1.5,48,1,true),PM({color:0xe4efec,transparent:true,opacity:.2,roughness:0,metalness:.1,envMapIntensity:1.8,depthWrite:false}));car.position.y=-.3;g.add(car);
+const base=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.1,48),PM({color:0xdfeae6,transparent:true,opacity:.35,roughness:0,envMapIntensity:1.8}));base.position.y=-1.05;g.add(base);
+const liq=new THREE.Mesh(new THREE.CylinderGeometry(.77,.77,.75,48),PM({color:0x2b170c,roughness:.08,clearcoat:1}));liq.position.y=-.67;g.add(liq);
+const str=new THREE.Mesh(new THREE.CylinderGeometry(.045,.04,1,16),PM({color:0x3a2010,roughness:.05,clearcoat:1}));str.position.y=.15;g.add(str);
+const dropM=PM({color:0x3a2010,roughness:.05,clearcoat:1}),drops=[0,1,2].map(()=>{const d=new THREE.Mesh(new THREE.SphereGeometry(1,16,16),dropM);g.add(d);return d});
+const rip=new THREE.Mesh(new THREE.RingGeometry(.9,1,48),new THREE.MeshBasicMaterial({color:0xd9b080,transparent:true,opacity:.4,side:THREE.DoubleSide}));rip.rotation.x=-Math.PI/2;rip.position.y=-.29;g.add(rip);
+G.push(g);
+// ---- 2: caramel ribbon into a cup
+g=new THREE.Group();
+const sw=new THREE.CatmullRomCurve3(Array.from({length:140},(_,i)=>{const t=i/139;return new THREE.Vector3(.6*Math.sin(t*18)*(.3+.7*t),2.5-t*3.25,.6*Math.cos(t*18)*(.3+.7*t))}));
+const caramel=PM({color:0xb8691f,roughness:.08,clearcoat:1,emissive:0x2a1000,envMapIntensity:1.6});
+const ribbon=new THREE.Mesh(tube(sw,260,24,t=>.06+.17*Math.sin(Math.PI*Math.min(1,t*1.1))),caramel);g.add(ribbon);
+addCup(g,-1.55,0xf3ebdc);
+const cf2=new THREE.Mesh(new THREE.CircleGeometry(.93,48),PM({color:0x7a4320,roughness:.08,clearcoat:1}));cf2.rotation.x=-Math.PI/2;cf2.position.y=-.7;g.add(cf2);
+const pool=new THREE.Mesh(new THREE.CircleGeometry(.5,40),caramel);pool.rotation.x=-Math.PI/2;pool.position.y=-.695;g.add(pool);
+g.userData.rib=ribbon;G.push(g);
+// ---- 3: latte with rosetta art and steam
+g=new THREE.Group();
+const sauc=new THREE.Mesh(prof([[.001,0],[1.2,0],[1.6,.1],[1.85,.25],[1.8,.28],[1.5,.18],[.9,.12],[.001,.12]]),ceramic(0xe9dfcb));sauc.position.y=-.95;g.add(sauc);
+const lc=addCup(g,-.82,0xf3ebdc);
+const art=tex(512,512,(x)=>{const gr=x.createRadialGradient(256,256,10,256,256,256);gr.addColorStop(0,'#b97f48');gr.addColorStop(1,'#5e3418');x.fillStyle=gr;x.fillRect(0,0,512,512);
+x.filter='blur(4px)';x.strokeStyle='#f8eed9';x.lineCap='round';
+for(let i=0;i<6;i++){const y=380-i*52,w=150-i*18;x.lineWidth=24;x.beginPath();x.moveTo(256-w,y-40);x.quadraticCurveTo(256,y+60,256+w,y-40);x.stroke()}
+x.filter='blur(2px)';x.strokeStyle='#8a5a2c';x.lineWidth=8;x.beginPath();x.moveTo(256,70);x.lineTo(256,430);x.stroke()},true);
+const lf=new THREE.Mesh(new THREE.CircleGeometry(.93,64),PM({map:art,roughness:.25,clearcoat:.6}));lf.rotation.x=-Math.PI/2;lf.position.y=.1;g.add(lf);
+const sp=tex(128,128,(x)=>{const r=x.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(255,255,255,.9)');r.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=r;x.fillRect(0,0,128,128)});
+const steam=Array.from({length:8},(_,i)=>{const s=new THREE.Sprite(new THREE.SpriteMaterial({map:sp,transparent:true,opacity:0,depthWrite:false}));s.userData.o=i/8;g.add(s);return s});
+G.push(g);
+G.forEach(o=>{o.userData.s=0;o.visible=false;S.add(o)});G[0].userData.s=1;
+// soft contact shadow
+const sh=new THREE.Mesh(new THREE.PlaneGeometry(5,5),new THREE.MeshBasicMaterial({map:tex(128,128,(x)=>{const r=x.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(40,24,12,.55)');r.addColorStop(1,'rgba(40,24,12,0)');x.fillStyle=r;x.fillRect(0,0,128,128)}),transparent:true,depthWrite:false,toneMapped:false}));sh.rotation.x=-Math.PI/2;S.add(sh);
+// bean fragments burst on every section change
+const NF=70,frag=new THREE.InstancedMesh(new THREE.SphereGeometry(1,10,10),PM({color:0x4a2514,roughness:.5,clearcoat:.3,side:THREE.FrontSide}),NF);frag.frustumCulled=false;S.add(frag);
+const fd=Array.from({length:NF},()=>({p:new THREE.Vector3(),v:new THREE.Vector3(),r:new THREE.Euler(),w:new THREE.Vector3(),s:0,life:0})),dm=new THREE.Object3D();
+burst=()=>fd.forEach(f=>{f.p.set(ox,oy,0);const a=Math.random()*6.28,s=.03+Math.random()*.07;f.v.set(Math.cos(a)*s,Math.sin(a)*s+.03,(Math.random()-.5)*.08);f.w.set(Math.random()*.2,Math.random()*.2,Math.random()*.2);f.s=.05+Math.random()*.1;f.life=1});
+const fit=()=>{const w=innerWidth,h=innerHeight;R.setSize(w,h,false);C.aspect=w/h;C.updateProjectionMatrix();const vh=2*9*Math.tan(17.5*Math.PI/180),vw=vh*C.aspect;
+if(C.aspect>1){ox=vw*.24;oy=0;sc=1}else{ox=0;oy=-vh*.2;sc=.7}};
+fit();addEventListener('resize',fit);
+addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+const clk=new THREE.Clock();
+(function loop(){requestAnimationFrame(loop);const t=clk.getElapsedTime();
+G.forEach((o,i)=>{const u=o.userData;u.s+=((i===active?1:0)-u.s)*.07;o.visible=u.s>.01;o.scale.setScalar(Math.max(u.s,.001)*sc*(i===0?1.15:1));
+o.position.set(ox,oy+Math.sin(t*1.4)*.1-(1-u.s)*.8,0);
+o.rotation.y=i===0?t*.6+mx*1.2:(i===3?-.4+mx*.8:t*.35+mx);o.rotation.x=i===0?-.1+my*.4:(i===3?.5+my*.3:my*.3);o.rotation.z=i===0?.3+Math.sin(t)*.05:0});
+mini[0].position.set(-1.5+Math.sin(t)*.2,-.9+Math.sin(t*1.8)*.15,.6);mini[0].rotation.set(t*.7,t*.5,0);
+mini[1].position.set(1.6,1.0+Math.sin(t*1.5)*.15,-.4);mini[1].rotation.set(t*.5,t*.8,1);
+str.scale.y=.9*(.95+.05*Math.sin(t*6));
+drops.forEach((d,i)=>{const p=(t*.9+i/3)%1;d.position.set(0,.55-p*.8,0);d.scale.set(.05,.065,.05)});
+const rp=(t*1.2)%1;rip.scale.setScalar(.2+rp*.8);rip.material.opacity=.45*(1-rp);
+G[2].userData.rib.rotation.y=Math.sin(t*1.3)*.15;
+steam.forEach(s=>{const p=(t*.18+s.userData.o)%1;s.position.set(Math.sin(p*6+s.userData.o*9)*.25,.45+p*1.9,0);s.scale.setScalar(.5+p*1.1);s.material.opacity=.3*Math.sin(Math.PI*p)*G[3].userData.s});
+fd.forEach((f,i)=>{if(f.life>0){f.p.add(f.v);f.v.y-=.0015;f.r.x+=f.w.x;f.r.y+=f.w.y;f.life-=.008}const k=Math.max(f.life,0)*f.s;dm.position.copy(f.p);dm.rotation.copy(f.r);dm.scale.set(k*.7,k*1.1,k*.55);dm.updateMatrix();frag.setMatrixAt(i,dm.matrix)});
+frag.instanceMatrix.needsUpdate=true;
+sh.visible=active<4;sh.position.set(ox,oy-2.3*sc,0);sh.scale.setScalar(sc*(.9+.1*Math.sin(t*1.4)));
+R.render(S,C)})();
+}catch(e){console.warn('WebGL ishlamadi',e)}
+</script>
+<script>
+(()=>{
+const $=q=>document.querySelector(q);
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' so’m';
+const P=[
+{id:'eth',n:'Ethiopia Yirgacheffe',o:'Efiopiya',r:'Light',f:'Fruity',d:'Gul va sitrus hidi, yengil kislotali.',p:145000,c:'#c98f4a'},
+{id:'col',n:'Colombia Huila',o:'Kolumbiya',r:'Medium',f:'Chocolate',d:'Karamel va sut shokolad ta’mi.',p:128000,c:'#8a5a3a'},
+{id:'ken',n:'Kenya AA',o:'Keniya',r:'Light',f:'Fruity',d:'Qora smorodina va mevali ravshan ta’m.',p:152000,c:'#b4502e'},
+{id:'bra',n:'Brazil Santos',o:'Braziliya',r:'Dark',f:'Nutty',d:'Yong’oq va qora shokolad, past kislotali.',p:119000,c:'#4b2e22'},
+{id:'gua',n:'Guatemala Antigua',o:'Gvatemala',r:'Medium',f:'Nutty',d:'Kakao va yengil ziravor, mayin tana.',p:135000,c:'#6d6a4a'},
+{id:'sum',n:'Sumatra Mandheling',o:'Sumatra',r:'Dark',f:'Chocolate',d:'To’q, ma’danli, qora shokolad va tamaki.',p:126000,c:'#2f3b36'}];
+const PL=[
+{id:'pw',n:'Haftalik obuna',d:'Har hafta 1 ta yangi xalta. Istalgan paytda to’xtatiladi.',p:120000},
+{id:'pm',n:'Oylik obuna',d:'Oyiga 2 ta xalta va bepul yetkazish.',p:230000},
+{id:'pq',n:'Choraklik obuna',d:'3 oyga 6 ta xalta, 15% chegirma bilan.',p:590000}];
+const ALL=P.concat(PL),by=id=>ALL.find(x=>x.id===id);
+const st={get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let cart=st.get('pp_cart',{}),user=st.get('pp_session',null),tab='signup',pending=false,qs={};
+$('#grid').innerHTML=P.map(p=>`<article class="card"><div class="bag" style="--c:${p.c}"><div><div class="lbl"><b>${p.n.split(' ')[0]}</b><small>${p.r}</small></div></div></div><h3>${p.n}</h3><p class="meta">${p.o}, ${p.r}, ${p.f}</p><p>${p.d}</p><div class="row"><b>${fmt(p.p)}</b><button class="btn" type="button" data-add="${p.id}">Savatga</button></div></article>`).join('');
+$('#plangrid').innerHTML=PL.map(p=>`<article class="card"><h3>${p.n}</h3><p>${p.d}</p><div class="row"><span class="price">${fmt(p.p)}</span><button class="btn" type="button" data-add="${p.id}">Tanlash</button></div></article>`).join('');
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200)};
+const info=(a,b)=>{$('#it').textContent=a;$('#ib').textContent=b;$('#info').classList.add('open')};
+const total=()=>Object.keys(cart).reduce((a,k)=>a+by(k).p*cart[k],0);
+function renderCart(){const ks=Object.keys(cart);$('#cc').textContent=ks.reduce((a,k)=>a+cart[k],0);$('#ct').textContent=fmt(total());
+$('#cbody').innerHTML=ks.length?ks.map(k=>{const p=by(k);return `<div class="it"><b>${p.n}</b><b>${fmt(p.p*cart[k])}</b><div class="qty"><button type="button" data-dec="${k}" aria-label="Kamaytirish">−</button><span>${cart[k]}</span><button type="button" data-inc="${k}" aria-label="Ko’paytirish">+</button></div><button class="x" type="button" data-del="${k}" style="justify-self:end">Olib tashlash</button></div>`}).join(''):'<p class="small">Savat hozircha bo’sh. Kofe tanlang.</p>';
+st.set('pp_cart',cart)}
+function renderUser(){const a=$('#acct');if(user){a.innerHTML='<span class="who"></span><button class="link" type="button" data-logout>Chiqish</button>';a.firstChild.textContent=user.name}else a.innerHTML='<button class="link" type="button" data-open="auth" data-tab="login">Log in</button><button class="btn" type="button" data-open="auth" data-tab="signup">Sign up</button>'}
+function setTab(t){tab=t;document.querySelectorAll('[data-tab].on,.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));$('#nl').style.display=t==='signup'?'grid':'none';$('#asub').textContent=t==='signup'?'Hisob yaratish':'Kirish';$('#ae').textContent=''}
+const hash=async v=>{try{return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)))].map(b=>b.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(v)))}};
+function checkout(){if(!Object.keys(cart).length){toast('Savat bo’sh');return}
+if(!user){pending=true;$('#cart').classList.remove('open');setTab('signup');$('#auth').classList.add('open');$('#ae').textContent='Buyurtma berish uchun avval hisob yarating yoki kiring.';return}
+const n=Math.floor(1000+Math.random()*9000),sum=fmt(total());cart={};renderCart();$('#cart').classList.remove('open');
+info('Buyurtma qabul qilindi','Rahmat, '+user.name+'! Buyurtma #'+n+' uchun jami '+sum+'. Tafsilotlar '+user.email+' manziliga yuboriladi.')}
+function quizResult(){if(!qs.r||!qs.f)return;let best=P[0],bs=-1;P.forEach(p=>{const sc=(p.r===qs.r?2:0)+(p.f===qs.f?2:0);if(sc>bs){bs=sc;best=p}});
+$('#qres').innerHTML=`<b style="font:700 20px 'Playfair Display',serif;color:var(--ink)">${best.n}</b><br>${best.d}<div class="row" style="margin-top:12px"><b style="color:var(--ink)">${fmt(best.p)}</b><button class="btn" type="button" data-add="${best.id}">Savatga</button></div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('button,a');if(!b)return;const d=b.dataset;
+if(d.add){cart[d.add]=(cart[d.add]||0)+1;renderCart();toast(by(d.add).n+' savatga qo’shildi')}
+else if(d.inc){cart[d.inc]++;renderCart()}
+else if(d.dec){if(--cart[d.dec]<=0)delete cart[d.dec];renderCart()}
+else if(d.del){delete cart[d.del];renderCart()}
+else if(d.go){document.querySelector(d.go).scrollIntoView({behavior:'smooth'})}
+else if(b.hasAttribute('data-quiz')){$('#quiz').classList.add('open')}
+else if(d.open==='cart'){$('#cart').classList.add('open')}
+else if(d.open==='auth'){setTab(d.tab||'signup');$('#auth').classList.add('open');setTimeout(()=>$('#af input:not([hidden])').focus(),50)}
+else if(d.tab){setTab(d.tab)}
+else if(d.q){const[k,v]=d.q.split(':');qs[k]=v;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b));quizResult()}
+else if(b.hasAttribute('data-checkout')){checkout()}
+else if(b.hasAttribute('data-logout')){user=null;st.set('pp_session',null);renderUser();toast('Hisobdan chiqdingiz')}
+else if(b.hasAttribute('data-close')){b.closest('.ov,.drawer').classList.remove('open')}});
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.ov.open,.drawer.open').forEach(x=>x.classList.remove('open'))});
+$('#af').addEventListener('submit',async e=>{e.preventDefault();const f=e.target,name=f.name.value.trim(),email=f.email.value.trim().toLowerCase(),pass=f.pass.value,er=$('#ae');
+if(tab==='signup'&&name.length<2){er.textContent='Ismingizni kiriting.';return}
+if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){er.textContent='Email noto’g’ri kiritilgan.';return}
+if(pass.length<6){er.textContent='Parol kamida 6 belgidan iborat bo’lsin.';return}
+const users=st.get('pp_users',{}),h=await hash(pass);
+if(tab==='signup'){if(users[email]){er.textContent='Bu email bilan hisob bor. Log in orqali kiring.';return}users[email]={name,h};st.set('pp_users',users);user={name,email}}
+else{const u=users[email];if(!u||u.h!==h){er.textContent='Email yoki parol noto’g’ri.';return}user={name:u.name,email}}
+st.set('pp_session',user);f.reset();$('#auth').classList.remove('open');renderUser();toast('Xush kelibsiz, '+user.name+'!');
+if(pending){pending=false;checkout()}});
+renderCart();renderUser();setTab('signup');
+})();
+</script>
+</body>
+</html>
